@@ -1,4 +1,4 @@
-
+{
   "name": "openwards",
   "version": "0.0.1",
   "private": true,
@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "bash startup.sh ",
-      "exce": "react-native start",    
+    "exec": "react-native start",    
     "test": "jest"
   },
   "dependencies": {

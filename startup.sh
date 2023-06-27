@@ -6,8 +6,28 @@ NAME_EMULATOR="$LIST_EMULATORS"
 
 $PATH_EXE_EMULATOR -avd $NAME_EMULATOR -no-window &
 EXECUTE_PID=$!
+IS_BOOT_ANIMATION_COMMAND="adb -e shell getprop init.svc.bootanim"
 
-sleep 5
+# check if emulator is running with adb
+while true; do
+   animation_mode=`$IS_BOOT_ANIMATION_COMMAND 2>&1`
+   echo $animation_mode
+
+   if [[ $animation_mode == "adb: no emulators found" ]]; then
+      echo "Emulator don't running"
+   elif [[ $animation_mode == "adb: device offline" ]]; then
+      echo "Emulator running but offline"
+   elif [[ $animation_mode == "stopped" ]]; then
+      echo "Emulator running but offline"
+      sleep 1
+      break
+   elif [[ $animation_mode == "running" ]]; then
+      echo "Emulator is running..."
+   fi
+   sleep 1
+done
+
+echo "Running scrcpy..."
 scrcpy -S&
 SCRCYPY_PID=$!
 
@@ -15,9 +35,9 @@ echo "PID of EXECUTE: $EXECUTE_PID"
 echo "PID of SCRCYPY: $SCRCYPY_PID"
 
 
-yarn exce &
+yarn exec &""
 sleep 2
-echo "Intalling app "
+echo "Intalling app..."
 yarn android &
 
 
@@ -27,7 +47,7 @@ function killProcesses() {
    kill $SCRCYPY_PID
    kill $EXECUTE_PID
    sleep 2
-   echo "Killing processes"
+   echo "Killing processes..."
 }
 
 
