@@ -1,72 +1,31 @@
-import React, { useRef, useState } from 'react';
-import { View, Animated, TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-const App = () => {
-  const [isFlipped, setIsFlipped] = useState(false);
-  const flipAnimation = useRef(new Animated.Value(0)).current;
-
-  const handleFlip = () => {
-    Animated.timing(flipAnimation, {
-      toValue: isFlipped ? 0 : 180,
-      duration: 50,
-      useNativeDriver: true,
-    }).start(() => setIsFlipped(!isFlipped));
-  };
-
-  const frontInterpolate = flipAnimation.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['0deg', '180deg'],
-  });
-  const backInterpolate = flipAnimation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['180deg', '360deg'],
-  });
-
-  const frontAnimatedStyle = {
-    transform: [{ rotateY: frontInterpolate }],
-  };
-  const backAnimatedStyle = {
-    transform: [{ rotateY: backInterpolate }],
-  };
-
+import {useEffect} from "react";
+import {Canvas, Circle, Group} from "@shopify/react-native-skia";
+import {
+  useDerivedValue,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
+ 
+export const HelloWorld = () => {
+  const size = 256;
+  const r = useSharedValue(0);
+  const c = useDerivedValue(() => size - r.value);
+  useEffect(() => {
+    r.value = withRepeat(withTiming(size * 0.33, { duration: 1000 }), -1);
+  }, [r, size]);
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={handleFlip}>
-        <Animated.View style={[styles.cardContainer, frontAnimatedStyle]}>
-          <Text style={styles.cardText}>Front</Text>
-        </Animated.View>
-        <Animated.View style={[styles.cardContainer, styles.cardBack, backAnimatedStyle]}>
-          <Text style={styles.cardText}>Back</Text>
-        </Animated.View>
-      </TouchableOpacity>
-    </View>
+    <Canvas style={{ flex: 1 }}>
+      <Group blendMode="multiply">
+        <Circle cx={r} cy={r} r={r} color="cyan" />
+        <Circle cx={c} cy={r} r={r} color="magenta" />
+        <Circle
+          cx={size/2}
+          cy={c}
+          r={r}
+          color="yellow"
+        />
+      </Group>
+    </Canvas>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardContainer: {
-    width: 200,
-    height: 300,
-    backgroundColor: 'blue',
-    backfaceVisibility: 'hidden',
-    borderRadius:10
-  },
-  cardBack: {
-    backgroundColor: 'red',
-    position: 'absolute',
-    top: 0,
-  },
-  cardText: {
-    fontSize: 24,
-    color: 'white',
-    textAlign: 'center',
-    marginTop: 50,
-  },
-});
-
-export default App;
