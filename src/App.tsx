@@ -7,7 +7,7 @@ import {
   withTiming,
 } from "react-native-reanimated";
  
-export const HelloWorld = () => {
+ const App= () => {
   const size = 256;
   const r = useSharedValue(0);
   const c = useDerivedValue(() => size - r.value);
@@ -15,9 +15,9 @@ export const HelloWorld = () => {
     r.value = withRepeat(withTiming(size * 0.33, { duration: 1000 }), -1);
   }, [r, size]);
   return (
-    <Canvas style={{ flex: 1 }}>
+    <Canvas style={{ flex: 1 ,backgroundColor:"#DEFEFE" }}>
       <Group blendMode="multiply">
-        <Circle cx={r} cy={r} r={r} color="cyan" />
+        <Circle cx={r} cy={r} r={r} color="#1123ad" />
         <Circle cx={c} cy={r} r={r} color="magenta" />
         <Circle
           cx={size/2}
@@ -29,3 +29,5 @@ export const HelloWorld = () => {
     </Canvas>
   );
 };
+
+export default App;

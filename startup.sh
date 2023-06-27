@@ -4,7 +4,7 @@ PATH_EXE_EMULATOR="$PATH_EMULATOR/emulator"
 LIST_EMULATORS="$($PATH_EXE_EMULATOR -list-avds | head -n 1)"
 NAME_EMULATOR="$LIST_EMULATORS"
 
-$PATH_EXE_EMULATOR -avd $NAME_EMULATOR -no-window &
+$PATH_EXE_EMULATOR -avd $NAME_EMULATOR -no-window  -no-snapshot-load -no-snapshot-save -memory 2000&
 EXECUTE_PID=$!
 IS_BOOT_ANIMATION_COMMAND="adb -e shell getprop init.svc.bootanim"
 
@@ -28,14 +28,14 @@ while true; do
 done
 
 echo "Running scrcpy..."
-scrcpy -S&
+scrcpy -S --max-size 1024 --video-bit-rate 30M --max-fps 15 --render-driver=opengl &
 SCRCYPY_PID=$!
 
 echo "PID of EXECUTE: $EXECUTE_PID"
 echo "PID of SCRCYPY: $SCRCYPY_PID"
 
 
-yarn exec &""
+yarn exc &""
 sleep 2
 echo "Intalling app..."
 yarn android &
@@ -49,6 +49,5 @@ function killProcesses() {
    sleep 2
    echo "Killing processes..."
 }
-
 
 wait 
