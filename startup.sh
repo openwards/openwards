@@ -8,7 +8,7 @@ $PATH_EXE_EMULATOR -avd $NAME_EMULATOR -no-window &
 EXECUTE_PID=$!
 
 sleep 5
-scrcpy &
+scrcpy -S&
 SCRCYPY_PID=$!
 
 echo "PID of EXECUTE: $EXECUTE_PID"
