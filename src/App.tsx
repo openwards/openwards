@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import auth  from '@react-native-firebase/auth';
 import { Register } from './screen/register/Register';
 import { Home } from './screen/home/Home';
+import { Login } from './screen/login/Login';
 
 export default function App() {
   const [initializing, setInitializing] = useState(true);
@@ -21,7 +22,7 @@ export default function App() {
 
   if(!user){
     return (
-      <Register/>
+      <Login/>
     );
   }
 
