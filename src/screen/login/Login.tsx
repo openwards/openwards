@@ -3,7 +3,7 @@ import { Button, SafeAreaView, Text, TextInput } from "react-native";
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Navigation } from "react-native-navigation";
 
-export function Login(props) {
+export function Login() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 
@@ -28,7 +28,7 @@ export function Login(props) {
       }} />
 
       <Button title="Register" onPress={() => {
-        Navigation.push(props.componentId, {
+        Navigation.push('group.auth', {
           component: {
             name: "Register"
           }

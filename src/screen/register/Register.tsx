@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, SafeAreaView, Text, TextInput } from "react-native";
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Navigation } from "react-native-navigation";
