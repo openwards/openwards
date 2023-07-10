@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { Button, SafeAreaView, TextInput } from "react-native";
+import { Button, SafeAreaView, Text, TextInput } from "react-native";
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { Navigation } from "react-native-navigation";
 
-export function Login() {
+export function Login(props) {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 
   return (
     <SafeAreaView>
+      <Text>Login</Text>
       <TextInput onChangeText={setEmail} placeholder="Email" />
       <TextInput secureTextEntry onChangeText={setPassword} placeholder="Password" />
       <Button title='Sign in' onPress={async () => {
@@ -24,5 +26,13 @@ export function Login() {
           }
         }
       }} />
+
+      <Button title="Register" onPress={() => {
+        Navigation.push(props.componentId, {
+          component: {
+            name: "Register"
+          }
+        });
+      }}/>
     </SafeAreaView>);
 }
