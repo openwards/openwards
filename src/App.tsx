@@ -1,31 +1,16 @@
 import { useEffect, useState } from 'react';
-import auth  from '@react-native-firebase/auth';
-import { Register } from './screen/register/Register';
-import { Home } from './screen/home/Home';
+import auth from '@react-native-firebase/auth';
+import { registerScreens } from './screen';
+import { Navigation } from 'react-native-navigation';
+import { View, Text } from 'react-native';
+import { setAuthStackNavigation, setHomeStackNavigation } from './navigation';
 
-export default function App() {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState<any>();
 
-  function onAuthStateChange(user: any){
-      setUser(user);
-    if(initializing) setInitializing(false);
-  }
+export function start() {
+  // Function to setup initial settings before run App component
+  registerScreens();
+  Navigation.events().registerAppLaunchedListener(() => {
+    setHomeStackNavigation();
+  });
+};
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChange);
-    return subscriber;
-  }, []); 
-
-  if(initializing) return null;
-
-  if(!user){
-    return (
-      <Register/>
-    );
-  }
-
-  return (
-    <Home/>
-  );
-}
