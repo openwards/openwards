@@ -1,11 +1,13 @@
 import { Button, SafeAreaView, Text } from "react-native";
 import { setAuthStackNavigation } from "../../navigation";
-import auth from '@react-native-firebase/auth'
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { supabase } from "../../config/supabase";
+
+const auth = supabase.auth;
 
 export function Home(){
   const user = useCurrentUser();
-
+  console.log(user);
   if (user === null) {
     setAuthStackNavigation();
   }
@@ -15,7 +17,7 @@ export function Home(){
       <Text>Welcome</Text>
       <Button title="Log out" onPress={async () => {
         // after sign out
-        await auth().signOut();
+        auth.signOut();
       }}/>
     </SafeAreaView>
   );
