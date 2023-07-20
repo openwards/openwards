@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Button, SafeAreaView, Text, TextInput } from "react-native";
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Navigation } from "react-native-navigation";
+import { supabase } from "../../config/supabase";
+
+const auth = supabase.auth;
 
 export function Register(props) {
   const [email, setEmail] = useState<string>();
@@ -14,23 +16,15 @@ export function Register(props) {
       <TextInput secureTextEntry onChangeText={setPassword} placeholder="Password" />
       <Button title='Sign in' onPress={async () => {
         if (email && password && email !== "" && password !== "") {
-          try {
-            await auth().createUserWithEmailAndPassword(email, password);
-          } catch (error) {
-            console.log(error);
-            let authError: FirebaseAuthTypes.NativeFirebaseAuthError = error as FirebaseAuthTypes.NativeFirebaseAuthError
-            switch (authError.code) {
-              case "auth/email-already-in-use":
-                break;
-            }
-          }
+          // WARN: To sign up we need provide a smtp server to send email
+          await auth.signUp({ email: email, password: password});
         }
       }} />
 
       <Button title="Login" onPress={() => {
         Navigation.popToRoot(props.componentId);
-      }}/>
- 
+      }} />
+
     </SafeAreaView>
   );
 }
